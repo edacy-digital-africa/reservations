@@ -4,12 +4,11 @@ require('dotenv').config();
 const chalk = require('chalk');
 const ProgressBar = require('progress');
 const Reservation = require('./reservations/reservation')
-const bodyParser = require('body-parser');
 
 const { DB_USERNAME, DB_PASS, NODE_ENV, PORT } = process.env;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.post('/reservations', (req, res) => {
     Reservation.insertOne(req.body);
     res.send(req.body);
@@ -35,13 +34,13 @@ app.listen(PORT, () => {
     console.log('Server Listening');
 })
 
-// const bar = new ProgressBar(':bar', { total: 50 });
+// const bar = new ProgressBar(':bar', { total: 100 });
 // const timer = setInterval(() => {
 //     bar.tick();
 //     if(bar.complete) {
 //         clearInterval(timer);
 //     }
-// }, 100);
+// }, 40);
 
 // console.log(chalk.bold(chalk.underline(chalk.red(DB_PASS))))
 
