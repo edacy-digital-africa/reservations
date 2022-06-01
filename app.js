@@ -4,6 +4,7 @@ require('dotenv').config();
 const chalk = require('chalk');
 const ProgressBar = require('progress');
 const Reservation = require('./reservations/reservation')
+const Files = require('./api/utils/files');
 
 const { DB_USERNAME, DB_PASS, NODE_ENV, PORT } = process.env;
 
@@ -29,6 +30,13 @@ app.delete('/reservations/:id', (req, res) => {
     res.send(result);
 });
 
+// require('./api/modules/products/products.routes')(app);
+  //AUTOLOAD ROUTES
+  var routes = Files.walk(__dirname + '/api/modules');
+  for (var i = 0; i < routes.length; i++)
+    if (routes[i].indexOf('routes') !== -1)
+
+      require(routes[i])(app);
 
 app.listen(PORT, () => {
     console.log('Server Listening');
