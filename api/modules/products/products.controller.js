@@ -1,5 +1,16 @@
-const products = [];
-
+const products = [
+    {
+        id: 1,
+        name: 'T-shirt',
+        price: 100
+    },
+    {
+        id: 2,
+        name: 'Jus',
+        price: 5
+    }
+];
+module.exports.products = products;
 module.exports.findAll = (req, res) => {
     res.json(products)
 }

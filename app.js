@@ -4,7 +4,7 @@ require('dotenv').config();
 const chalk = require('chalk');
 const ProgressBar = require('progress');
 const Reservation = require('./reservations/reservation')
-const Files = require('./api/utils/files');
+const Files = require('edacy-files-walk');
 
 const { DB_USERNAME, DB_PASS, NODE_ENV, PORT } = process.env;
 

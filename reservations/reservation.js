@@ -1,3 +1,4 @@
+const ReservationRepository = require('./reservation.repository');
 const reservations = [
     {
         id: 1,
@@ -15,11 +16,12 @@ const reservations = [
     }
 ];
 module.exports.findAll = function findAll() {
-    return reservations;
+    return reservations.map((reservation) => new ReservationRepository(reservation));
 }
 
 module.exports.findOne = function findOne(reservationId) {
-    return reservations.find((resa) => resa.id == reservationId);
+    const reservation = reservations.find((resa) => resa.id == reservationId);
+    return new ReservationRepository(reservation);
 }
 
 module.exports.deleteOne = function deleteOne(reservationId) {
