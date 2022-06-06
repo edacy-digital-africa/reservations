@@ -3,40 +3,30 @@ const app = express();
 require('dotenv').config();
 const chalk = require('chalk');
 const ProgressBar = require('progress');
-const Reservation = require('./reservations/reservation')
 const Files = require('edacy-files-walk');
 
 const { DB_USERNAME, DB_PASS, NODE_ENV, PORT } = process.env;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.post('/reservations', (req, res) => {
-    Reservation.insertOne(req.body);
-    res.send(req.body);
-})
 
-app.get('/reservations', (req, res) => {
-    const reservations = Reservation.findAll();
-    res.send(reservations)
-});
-
-app.get('/reservations/:id', (req, res) => {
-    const reservation = Reservation.findOne(req.params.id);
-    res.send(reservation);
-});
-
-app.delete('/reservations/:id', (req, res) => {
-    const result = Reservation.deleteOne(req.params.id);
-    res.send(result);
-});
-
-// require('./api/modules/products/products.routes')(app);
   //AUTOLOAD ROUTES
-  var routes = Files.walk(__dirname + '/api/modules');
-  for (var i = 0; i < routes.length; i++)
-    if (routes[i].indexOf('routes') !== -1)
+var routes = Files.walk(__dirname + '/api/modules');
 
-      require(routes[i])(app);
+// IMPORT PUBLIC ROUTES
+for (var i = 0; i < routes.length; i++)
+    if (routes[i].indexOf('public.routes') !== -1)
+        require(routes[i])(app);
+
+
+// USE GUARD MIDDLEWARE
+require('./api/modules/auth/auth.guard')(app);
+
+
+// IMPORT PRIVATE ROUTES
+for (var i = 0; i < routes.length; i++)
+    if (routes[i].indexOf('routes') !== -1 && routes[i].indexOf('public.routes') === -1)
+        require(routes[i])(app);
 
 app.listen(PORT, () => {
     console.log('Server Listening');

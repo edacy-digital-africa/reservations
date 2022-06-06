@@ -1,4 +1,4 @@
-const products = require('../api/modules/products/products.controller').products;
+const products = require('../products/products.controller').products;
 module.exports = class ReservationRepository {
     id;
     clientId;
