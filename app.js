@@ -46,3 +46,47 @@ app.listen(PORT, () => {
 // const function1 = () => function2();
 
 // function1();
+
+const fs = require('fs');
+app.get('/stat', (req, res) => {
+    fs.readFile('./statistiques.pdf', (err, file) => {
+        res.send(file)
+    }) 
+})
+
+app.get('/stat2', (req, res) => {
+    const readable = fs.createReadStream(`${__dirname}/statistiques.pdf`);
+    readable.pipe(res);
+})
+
+const stream = require('stream');
+// Readable
+
+// Writable
+
+// Duplex
+
+// Transform
+
+const readable = new stream.Readable();
+readable._read = () => {
+    console.log('reading')
+}
+
+readable.push('Ousmane');
+readable.push('Sakho');
+
+const writable = new stream.Writable();
+
+writable._write = (chunk, encoding, next) => {
+    console.log(chunk.toString())
+    next()
+}
+
+readable.pipe(writable);
+
+app.get('/stdout', (req, res) => {
+    readable.push(req.query.name);
+    readable.pipe(process.stdout);
+    res.send(req.query.name)
+})

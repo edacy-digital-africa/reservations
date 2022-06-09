@@ -6,6 +6,7 @@ module.exports.register = ({ username, password }) => {
 
 module.exports.login = ({ username, password }) => {
     let user = UsersService.findOneByUsername(username);
+    
     if(!user || user.password !== password) {
         return null;
     } else {

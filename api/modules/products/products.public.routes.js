@@ -2,10 +2,9 @@ module.exports = function(app) {
     const Ctrl = require('./products.controller');
 
     app.route('/products')
-      .post(Ctrl.insertOne);
+      .get(Ctrl.findAll)
 
       app.route('/products/:id')
-      .put(Ctrl.update)
-      .delete(Ctrl.deleteOne)
+      .get(Ctrl.findOne)
       
   };
