@@ -3,17 +3,20 @@ const users = [
     { id: 2, username: 'james', password: '123', role: 'USER' },
     { id: 3, username: 'franc', password: '12345', role: 'USER' },
 ]
+const User = require('./users.schema');
 
-module.exports.insertOne = (userInput) => {
-    const user = { ...userInput, role: 'USER', id: users.length + 2 };
-    users.push(user);
-    return user;
+module.exports.insertOne = async (userInput) => {
+    const user = { ...userInput, role: 'USER' };
+    const result = await User.create(user);
+    return result;
 }
 
-module.exports.findOneByUsername = (username) => {
-    return users.find((user) => user.username === username);
+module.exports.findOneByUsername = async (username) => {
+    const result = await User.findOne({ username: username });
+    return result;
 }
 
-module.exports.list = () => {
-    return users;
+module.exports.list = async () => {
+    const result = await User.find();
+    return result;
 }

@@ -4,13 +4,13 @@ module.exports.register = ({ username, password }) => {
     return UsersService.insertOne({ username, password });
 }
 
-module.exports.login = ({ username, password }) => {
-    let user = UsersService.findOneByUsername(username);
+module.exports.login = async ({ username, password }) => {
+    let user = await UsersService.findOneByUsername(username);
     
     if(!user || user.password !== password) {
         return null;
     } else {
-        user = { ...user };
+        user = { ...user.toObject() };
         delete user.password;
         const token = jwt.sign(user, 'digitalAfricaKey', { expiresIn: 60 * 60 });
         return { user, token };
@@ -31,6 +31,6 @@ module.exports.verifyToken = (token) => {
 
 
 
-module.exports.listUsers = () => {
-    return UsersService.list();
+module.exports.listUsers = async () => {
+    return await UsersService.list();
 }

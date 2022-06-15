@@ -4,33 +4,50 @@ require('dotenv').config();
 const chalk = require('chalk');
 const ProgressBar = require('progress');
 const Files = require('edacy-files-walk');
+const mongoose = require('mongoose');
 
 const { DB_USERNAME, DB_PASS, NODE_ENV, PORT } = process.env;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-  //AUTOLOAD ROUTES
-var routes = Files.walk(__dirname + '/api/modules');
-
-// IMPORT PUBLIC ROUTES
-for (var i = 0; i < routes.length; i++)
-    if (routes[i].indexOf('public.routes') !== -1)
-        require(routes[i])(app);
-
-
-// USE GUARD MIDDLEWARE
-require('./api/modules/auth/auth.guard')(app);
-
-
-// IMPORT PRIVATE ROUTES
-for (var i = 0; i < routes.length; i++)
-    if (routes[i].indexOf('routes') !== -1 && routes[i].indexOf('public.routes') === -1)
-        require(routes[i])(app);
-
-app.listen(PORT, () => {
-    console.log('Server Listening');
+console.log('Connecting to db...');
+mongoose.connect(process.env.DB_URL)
+.then((result) => {
+    console.log('App is connected to Atlas db');
+    initApp();
 })
+.catch((error) => {
+    console.log('Error when connecting to db \n'+error);
+});
+
+for(let i = 0; i<10; i++) {
+    console.log(i)
+}
+
+function initApp() {
+      //AUTOLOAD ROUTES
+    var routes = Files.walk(__dirname + '/api/modules');
+
+    // IMPORT PUBLIC ROUTES
+    for (var i = 0; i < routes.length; i++)
+        if (routes[i].indexOf('public.routes') !== -1)
+            require(routes[i])(app);
+
+
+    // USE GUARD MIDDLEWARE
+    require('./api/modules/auth/auth.guard')(app);
+
+
+    // IMPORT PRIVATE ROUTES
+    for (var i = 0; i < routes.length; i++)
+        if (routes[i].indexOf('routes') !== -1 && routes[i].indexOf('public.routes') === -1)
+            require(routes[i])(app);
+
+    app.listen(PORT, () => {
+        console.log('Server Listening');
+    });
+}
 
 // const bar = new ProgressBar(':bar', { total: 100 });
 // const timer = setInterval(() => {
@@ -47,20 +64,20 @@ app.listen(PORT, () => {
 
 // function1();
 
-const fs = require('fs');
-app.get('/stat', (req, res) => {
-    fs.readFile('./statistiques.pdf', (err, file) => {
-        res.send(file)
-    }) 
-})
+// const fs = require('fs');
+// app.get('/stat', (req, res) => {
+//     fs.readFile('./statistiques.pdf', (err, file) => {
+//         res.send(file)
+//     }) 
+// })
 
-app.get('/stat2', (req, res) => {
-    const readable = fs.createReadStream(`${__dirname}/statistiques.pdf`);
-    readable.pipe(res);
-})
+// app.get('/stat2', (req, res) => {
+//     const readable = fs.createReadStream(`${__dirname}/statistiques.pdf`);
+//     readable.pipe(res);
+// })
 
-const stream = require('stream');
-// Readable
+// const stream = require('stream');
+// // Readable
 
 // Writable
 
@@ -68,25 +85,25 @@ const stream = require('stream');
 
 // Transform
 
-const readable = new stream.Readable();
-readable._read = () => {
-    console.log('reading')
-}
+// const readable = new stream.Readable();
+// readable._read = () => {
+//     console.log('reading')
+// }
 
-readable.push('Ousmane');
-readable.push('Sakho');
+// readable.push('Ousmane');
+// readable.push('Sakho');
 
-const writable = new stream.Writable();
+// const writable = new stream.Writable();
 
-writable._write = (chunk, encoding, next) => {
-    console.log(chunk.toString())
-    next()
-}
+// writable._write = (chunk, encoding, next) => {
+//     console.log(chunk.toString())
+//     next()
+// }
 
-readable.pipe(writable);
+// readable.pipe(writable);
 
-app.get('/stdout', (req, res) => {
-    readable.push(req.query.name);
-    readable.pipe(process.stdout);
-    res.send(req.query.name)
-})
+// app.get('/stdout', (req, res) => {
+//     readable.push(req.query.name);
+//     readable.pipe(process.stdout);
+//     res.send(req.query.name)
+// })
