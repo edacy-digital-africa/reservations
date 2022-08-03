@@ -37,9 +37,9 @@
               "description": "Add a product",
               "content": {
                 "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/Product"
-                  }
+                    "schema": {
+                        "$ref": "#/components/schemas/Product"
+                    }
                 }
               },
               "required": true
@@ -67,6 +67,22 @@
             }
           }
         }
+      },
+      "components": {
+        "schemas": {
+          "Product": {
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "price": {
+                "type": "string"
+              }
+            }
+          }
+        }
       }
-
   }
