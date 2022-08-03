@@ -5,6 +5,9 @@ const chalk = require('chalk');
 const ProgressBar = require('progress');
 const Files = require('edacy-files-walk');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const { DB_USERNAME, DB_PASS, NODE_ENV, PORT } = process.env;
 
@@ -12,18 +15,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 console.log('Connecting to db...');
-mongoose.connect(process.env.DB_URL)
-.then((result) => {
-    console.log('App is connected to Atlas db');
-    initApp();
-})
-.catch((error) => {
-    console.log('Error when connecting to db \n'+error);
-});
+// mongoose.connect(process.env.DB_URL)
+// .then((result) => {
+//     console.log('App is connected to Atlas db');
+//     initApp();
+// })
+// .catch((error) => {
+//     console.log('Error when connecting to db \n'+error);
+// });
 
-for(let i = 0; i<10; i++) {
-    console.log(i)
-}
+
 
 function initApp() {
       //AUTOLOAD ROUTES
@@ -48,6 +49,8 @@ function initApp() {
         console.log('Server Listening');
     });
 }
+
+initApp()
 
 // const bar = new ProgressBar(':bar', { total: 100 });
 // const timer = setInterval(() => {
